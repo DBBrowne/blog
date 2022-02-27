@@ -1,3 +1,6 @@
+## Deployed on [Github pages](https://dbbrowne.github.io/blog/)
+
+
 # blog
 
 Good News: Your blog is ready!
