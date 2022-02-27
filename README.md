@@ -1,4 +1,4 @@
-## Deployed on [Github pages](https://dbbrowne.github.io/blog/)
+## Deployed on [Github pages](https://dbbrowne.github.io/blog/blog)
 
 
 # blog
