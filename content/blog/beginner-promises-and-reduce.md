@@ -25,7 +25,7 @@ With thanks to [AJ O'Neil](https://github.com/coolaj86), for his infinite patien
 We've all looked at JS's `awaits` and thought; "well, those are off waiting outside the main stack, so why not fire off several at once?"
 
 `Promise.all()` is there for us, great for the right situations, but is probably a good route to network, disk, and or CPU thrashing if you don't have infinite threads to open up.
-And assumes it that our awaits are all independent.
+And it assumes that our awaits are all independent.
 
 ## Promise Chains
 
