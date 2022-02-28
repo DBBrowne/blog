@@ -22,7 +22,7 @@ expect(mongooseObject.toJSON()).toMatchObject(jsObject)
 ```
 #### If you have dates, fix up your `mongooseObject.toJSON()` by replacing any date properties with 
 ```js
-mongooseObject.dateProperty = mongooseObject.dateProperty.toJSON()
+mongooseObjectJson.dateProperty = mongooseObject.dateProperty.toJSON()
 ```
 #### Keep your dependencies up to date.  
  - The older version of Jest we were using hid some diffs, making the issue and solution harder to find.
