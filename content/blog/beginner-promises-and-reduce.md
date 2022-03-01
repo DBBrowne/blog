@@ -66,7 +66,7 @@ The definition is `Array.prototype.reduce(function reducer (prev, current, index
 
 Sometimes we `return prev + current` from the reducer to make an accumulator, but that's an implementation.  
 I couldn't get over the lack of a `return` inside `reducer`, and could not grasp how the promise from  `await fn(el)` was getting into `prev`.  
-It doesn't.  A different promise is returned from the reducer function into the `prev` (the one from the reducer function).  That promise is waiting for the `fn(el)` promise to resolve.
+It doesn't.  A different promise is returned from the reducer function into the `prev` (the the promise from the reducer function).  That promise is waiting for the `fn(el)` promise to resolve.
 
 <br>  
 
@@ -79,4 +79,4 @@ Reduce's default behaviour, with no second argument, is to use the first element
 In this case, that would mean that the first `await promise` would `await arr[0]`, rather than `await fn(arr[0])`.  `fn(arr[0])` would never run.  
 The `initial` argument is only there to prevent Reduce using the first value in the array as the initial, and thereby failing to evaluate the passed `fn` for that value.  The initial value could be anything other than `not defined`, including null or undefined.  
 
-Promise.resolve() is chosen as the initial to indicate to the author that `prev` is a promise, and to ensure that the type of `prev` does not change between the first and subsequent iterations.
+Promise.resolve() is chosen as the initial to indicate to the user that `prev` is a promise, and to ensure that the type of `prev` does not change between the first and subsequent iterations.
