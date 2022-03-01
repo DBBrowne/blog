@@ -21,7 +21,7 @@ What're we going to do?
 First, let's lay out our menu content:
 ```html
   <nav>
-    <div>
+    <div class="menu-content">
       <img 
         src="http://tiny.cc/em2puz"
         alt="Unsplash is fantastic.  Check them out at the img src." 
@@ -116,7 +116,7 @@ Let's give our menu a background colour so we can see it over our content, and z
 nav{
   z-index: 10;
 }
-nav:hover{
+nav .menu-content{
   background-color: var(--color-bg);
 }
 ```
