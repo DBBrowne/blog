@@ -160,7 +160,8 @@ We need to keep the property we use for positioning consistent to use `transitio
 1. any other adjustments for padding/margins given our specific situation.
 
 We might make life easier here by fixing the width of the nav bar directly, and then sizing its contents to suit.  Up to you!
-
+### With simple animations:
+https://codepen.io/dbbrowne/pen/XWzyVRK
 
 There are still a few things to think about - accessibility and screen readers may not be well served by this approach.  Please give me some advice in the comments about how to handle this.
 
