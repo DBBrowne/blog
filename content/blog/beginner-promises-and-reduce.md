@@ -10,13 +10,13 @@ categories: [JavaScript, Promise, Reduce]
 
 > Async functions return a promise.  Reduce's first parameter is ***previous***, not *accumulator*.
 
-With thanks to [AJ O'Neil](https://github.com/coolaj86), for his infinite patience with junior engineers.
+With thanks to [AJ ONeal](https://github.com/coolaj86), for his infinite patience with junior engineers.
 
 <hr>
 
 ## TLDR
 ### The async keyword causes a function to return a Promise.  No further returns needed.
-### The first argument passed to the reducer function in to Array.Reduce(reducerFn, initial) is *previous*, not *accumulator*.
+### The first argument passed to the reducer function in to Array#reduce(reducerFn, initial) is *previous*, not *accumulator*.
 
 <hr>
 
@@ -31,7 +31,7 @@ And it assumes that our awaits are all independent.
 
 What if we want to take a set of async actions, one after another?
 
-Enter a neat implementation of a method to run async tasks in sequence, care of [AjScript](https://github.com/coolaj86/AJScript/issues/10)
+Enter a neat implementation of a method to run async tasks in sequence, care of [AJScript](https://github.com/coolaj86/AJScript/issues/10):
 
 ```js
 Promise._forEach = async function (arr, fn) {
