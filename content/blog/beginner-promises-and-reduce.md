@@ -1,9 +1,9 @@
 ---
-title: "A beginners look at Promises and Reduce"
+title: "A beginner's look at Promises and Reduce"
 description: "Async functions return a promise.  Reduce's first parameter is ***previous***, not *accumulator*. Promise._forEach is interesting."
 date: "2022-02-28"
 timezone: "Europe/London"
-utterances_term: "A beginners look at Promises and Reduce"
+utterances_term: "beginner-promise-reduce"
 categories: [JavaScript, Promise, Reduce]
 ---
 # A beginners look at Promises and Reduce
