@@ -1,5 +1,7 @@
 ---
-hero_title: Hello world.
+hero_title: Hello!
 ---
 
-Hi. I do tech stuff.
+This is just a placeholder blog site.
+
+Come visit me at [dbb.tools](https://dbb.tools) for more.

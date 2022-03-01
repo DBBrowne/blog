@@ -2,6 +2,6 @@
 title: About
 ---
 
-I'm the most interesting man in the universe.
+This is just a placeholder blog site.
 
-I once made a mistake, just to see how it feels.
+Come visit me at [dbb.tools](https://dbb.tools) for more.
