@@ -16,7 +16,7 @@ With thanks to [AJ ONeal](https://github.com/coolaj86), for his infinite patienc
 
 ## TLDR
 ### The async keyword causes a function to return a Promise.  No further returns needed.
-### The first argument passed to the reducer function in to Array#reduce(reducerFn, initial) is *previous*, not *accumulator*.
+### The first argument passed to the reducer function in Array#reduce(reducerFn, initial) is *previous*, not *accumulator*.
 
 <hr>
 
@@ -57,7 +57,7 @@ https://github.com/DBBrowne/code-challenges-public/blob/main/other/promise.forea
 The key lessons come from:
 
 #### Question: 
-##### How does this pass back to the `acc`? Why does this do anything other than resolve the initial `Promise.protoype.resolve()`, and then sit quietly?
+##### How does this pass back to the `acc`? Why does this do anything other than resolve the initial `Promise.prototype.resolve()` to undefined, and then sit quietly?
 #### Answer:
 The function used as a reducer is async. By definition this returns a promise, which becomes the accumulator (better thought of as `previous` here) in the reducer.  
 In fact, ***THERE IS NO ACCUMULATOR IN REDUCE***.  
@@ -65,8 +65,8 @@ In fact, ***THERE IS NO ACCUMULATOR IN REDUCE***.
 The definition is `Array.prototype.reduce(function reducer (prev, current, index, array){}, initialValueForPrev)`.
 
 Sometimes we `return prev + current` from the reducer to make an accumulator, but that's an implementation.  
-I couldn't get over the lack of a `return` inside `reducer`, and could not get how the promise from  `await fn(el)` was getting into `prev`.  
-It doesn't.  A different promise is returned from the reducer function into the `prev` (the one from the reducer function), that promise is waiting for the `fn(el)` promise to resolve.
+I couldn't get over the lack of a `return` inside `reducer`, and could not grasp how the promise from  `await fn(el)` was getting into `prev`.  
+It doesn't.  A different promise is returned from the reducer function into the `prev` (the one from the reducer function).  That promise is waiting for the `fn(el)` promise to resolve.
 
 <br>  
 
@@ -79,4 +79,4 @@ Reduce's default behaviour, with no second argument, is to use the first element
 In this case, that would mean that the first `await promise` would `await arr[0]`, rather than `await fn(arr[0])`.  `fn(arr[0])` would never run.  
 The `initial` argument is only there to prevent Reduce using the first value in the array as the initial, and thereby failing to evaluate the passed `fn` for that value.  The initial value could be anything other than `not defined`, including null or undefined.  
 
-Promise.resolve() is chosen as the initial to indicate to the author that 'prev' is a promise, and to ensure that the type of `prev` does not change between the first and subsequent iterations.
+Promise.resolve() is chosen as the initial to indicate to the author that `prev` is a promise, and to ensure that the type of `prev` does not change between the first and subsequent iterations.
