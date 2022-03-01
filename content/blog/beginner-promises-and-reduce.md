@@ -22,9 +22,9 @@ With thanks to [AJ O'Neil](https://github.com/coolaj86), for his infinite patien
 
 
 ## Parallel Promises
-We've all looked at JS's `awaits` and thought; "well, those are off waiting outside the main stack, so why not fire off several at once?"
+We've all looked at JS's `await`s and thought; "well, those are off waiting outside the main stack, so why not fire off several at once?"
 
-`Promise.all()` is there for us, great for the right situations, but is probably a good route to network, disk, and or CPU thrashing if you don't have infinite threads to open up.
+`Promise.all()` is there for us, great for the right situations, but is probably a good route to network, disk, and/or CPU thrashing if you don't have infinite throughput and processing power.
 And it assumes that our awaits are all independent.
 
 ## Promise Chains
@@ -66,7 +66,7 @@ The definition is `Array.prototype.reduce(function reducer (prev, current, index
 
 Sometimes we `return prev + current` from the reducer to make an accumulator, but that's an implementation.  
 I couldn't get over the lack of a `return` inside `reducer`, and could not get how the promise from  `await fn(el)` was getting into `prev`.  
-It doesn't.  A different promise is returned from the reducer function into the `prev` (the one from the reducer function), and that promise is waiting for the `fn(el)` promise to resolve.
+It doesn't.  A different promise is returned from the reducer function into the `prev` (the one from the reducer function), that promise is waiting for the `fn(el)` promise to resolve.
 
 <br>  
 
