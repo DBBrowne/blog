@@ -167,7 +167,7 @@ There are still a few things to think about - accessibility and screen readers m
 
 
 We can also make our nav bar a little slicker.  If we're using something like *React Router*'s [NavLink](https://v5.reactrouter.com/web/api/NavLink), then the currently active link will have an `active` class.  If we then move our burger icon into the link, we can give our user an indication of where they are:
-``jsx
+```jsx
 <NavLink to="url">
   <span>link title</span>
   <LeftArrow />
