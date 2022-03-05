@@ -179,7 +179,7 @@ a.active{
 }
 ```
 
-[navbar demo](https://user-images.githubusercontent.com/72463218/156239739-ba76eefc-d217-49ba-8556-0d7688e9f92e.gif)
+![navbar demo](https://user-images.githubusercontent.com/72463218/156239739-ba76eefc-d217-49ba-8556-0d7688e9f92e.gif)
 <!-- <img src="https://user-images.githubusercontent.com/72463218/156239739-ba76eefc-d217-49ba-8556-0d7688e9f92e.gif" alt="navbar demo" width="200"/> -->
 
 
