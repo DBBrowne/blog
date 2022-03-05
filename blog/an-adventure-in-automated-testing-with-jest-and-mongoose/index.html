@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>An adventure in automated testing with Jest and Mongoose - Duncan Browne</title>
+    <meta name="viewport" content="width=device-width" />
+    <meta name="git_repo" content="https://github.com/DBBrowne/blog" />
+    <meta name="git_host" content="github" />
+    <meta name="git_branch" content="main" />
+    <meta name="content_path" content="content" />
+    <link rel="stylesheet" href="https://DBBrowne.github.io/blog/style.css" />
+  </head>
+  <body>
+    <div class="main">
+      <header class="header">
+        <div class="brand content">
+          <h1>
+            <a href="https://DBBrowne.github.io/blog">Duncan Browne</a>
+          </h1>
+        </div>
+        <nav class="navbar">
+          <ul>
+            <li><a href="https://DBBrowne.github.io/blog">Home</a></li>
+            <li><a href="https://DBBrowne.github.io/blog/blog">Blog</a></li>
+          </ul>
+        </nav>
+      </header>
+      <section class="section default-single">
+        <div class="container">
+          <div class="content">
+            <div class="postmeta-head">
+              <p>
+                <span class="author">
+                  <img class="gravatar" src="https://www.gravatar.com/avatar/9598a7692b4d759110c8e736a9039094?s=64&d=identicon" />
+                  <span class="name">Duncan Browne</span>
+                </span>
+                <span class="date">February 27, 2022</span>
+                <span class="edit" style=""><a href="https://github.com/DBBrowne/blog/edit/main/content/blog/an-adventure-in-automated-testing-with-Jest-and-Mongoose.md" style="color: #485fc7" target="_blank">Suggest Edit</a></span>
+              </p>
+            </div>
+            <div class="single-title">
+              <h1 class="title"><a href="https://DBBrowne.github.io/blog/blog/an-adventure-in-automated-testing-with-jest-and-mongoose/">An adventure in automated testing with Jest and Mongoose</a></h1>
+            </div>
+            <h1 id="an-adventure-in-automated-testing-with-jest-and-mongoose">An adventure in automated testing with Jest and Mongoose</h1>
+            <blockquote>
+              <p>Beginner pitfalls with building automated tests that compare JS objects with mongoose objects.</p>
+            </blockquote>
+            <p>With thanks to <a href="https://stackoverflow.com/users/3001761/jonrsharpe">Jon Sharpe</a>, who kindly pointed me to the problem and solution here.</p>
+            <!-- raw HTML omitted -->
+            <h2 id="tldr">TLDR</h2>
+            <h4 id="mongoose-dates--js-dates">Mongoose dates != JS Dates</h4>
+            <h4 id="mongoose-objects--js-objects-use">Mongoose objects != JS objects. Use</h4>
+            <div class="highlight">
+              <pre tabindex="0" style="color: #f8f8f2; background-color: #272822; -moz-tab-size: 4; -o-tab-size: 4; tab-size: 4"><code class="language-js" data-lang="js"><span style="color:#a6e22e">expect</span>(<span style="color:#a6e22e">mongooseObject</span>.<span style="color:#a6e22e">toJSON</span>()).<span style="color:#a6e22e">toMatchObject</span>(<span style="color:#a6e22e">jsObject</span>)
+</code></pre>
+            </div>
+            <h4 id="if-you-have-dates-fix-up-your-mongooseobjecttojson-by-replacing-any-date-properties-with">If you have dates, fix up your <code>mongooseObject.toJSON()</code> by replacing any date properties with</h4>
+            <div class="highlight">
+              <pre tabindex="0" style="color: #f8f8f2; background-color: #272822; -moz-tab-size: 4; -o-tab-size: 4; tab-size: 4"><code class="language-js" data-lang="js"><span style="color:#a6e22e">mongooseObjectJson</span>.<span style="color:#a6e22e">dateProperty</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">mongooseObject</span>.<span style="color:#a6e22e">dateProperty</span>.<span style="color:#a6e22e">toJSON</span>()
+</code></pre>
+            </div>
+            <h4 id="keep-your-dependencies-up-to-date">Keep your dependencies up to date.</h4>
+            <ul>
+              <li>The older version of Jest we were using hid some diffs, making the issue and solution harder to find.</li>
+            </ul>
+            <!-- raw HTML omitted -->
+            <h2 id="the-long-version">The long version:</h2>
+            <p>
+              One of my first forays into JavaScript (well, into anything other than VBA and PowerShell) required some automated testing with Jest. We needed to change the behavior of an object derived from a MongoDB document. In order to establish the test scenario, I first needed to build tests that confirm creation the parent document works as expected.<br />
+              I had never TDD&rsquo;d before, or done any automated testing at all, but fortunately there was a chunky codebase with lots of examples to guide me. There were still a lot of rookie mistakes!
+            </p>
+            <p>A little context:</p>
+            <p><code>StepsContext.Create(data)</code>:</p>
+            <ul>
+              <li>creates a new Step with a <a href="https://mongoosejs.com/">mongoose.js</a> model</li>
+              <li>saves it to the MongoDB collection</li>
+              <li>returns the new Step</li>
+            </ul>
+            <p>So, let&rsquo;s check that works:</p>
+            <div class="highlight">
+              <pre tabindex="0" style="color: #f8f8f2; background-color: #272822; -moz-tab-size: 4; -o-tab-size: 4; tab-size: 4"><code class="language-js" data-lang="js"><span style="color:#a6e22e">describe</span>(<span style="color:#e6db74">&#39;Step functions&#39;</span>, () =&gt; {
+    <span style="color:#a6e22e">it</span>(<span style="color:#e6db74">&#39;should be able to create a step&#39;</span>, <span style="color:#66d9ef">async</span> () =&gt; {
+      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">step</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">StepsContext</span>.<span style="color:#a6e22e">create</span>(<span style="color:#a6e22e">stepBody</span>)
+      <span style="color:#a6e22e">expect</span>(<span style="color:#a6e22e">step</span>).<span style="color:#a6e22e">toEqual</span>(<span style="color:#a6e22e">stepBody</span>)
+    })
+})
+</code></pre>
+            </div>
+            <p>Well, that&rsquo;s a <strong>fail</strong>.</p>
+            <p>Hmm, we&rsquo;re getting back more fields than we put in because, of course, we&rsquo;re getting back the version and creation data from Mongo.</p>
+            <p>So, let&rsquo;s allow for extra fields:</p>
+            <div class="highlight">
+              <pre tabindex="0" style="color: #f8f8f2; background-color: #272822; -moz-tab-size: 4; -o-tab-size: 4; tab-size: 4"><code class="language-js" data-lang="js"><span style="color:#a6e22e">describe</span>(<span style="color:#e6db74">&#39;Step functions&#39;</span>, () =&gt; {
+    <span style="color:#a6e22e">it</span>(<span style="color:#e6db74">&#39;should be able to create a step&#39;</span>, <span style="color:#66d9ef">async</span> () =&gt; {
+      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">step</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">StepsContext</span>.<span style="color:#a6e22e">create</span>(<span style="color:#a6e22e">stepBody</span>)
+      <span style="color:#a6e22e">expect</span>(<span style="color:#a6e22e">step</span>).<span style="color:#a6e22e">toMatchObject</span>(<span style="color:#a6e22e">stepBody</span>)
+    })
+})
+</code></pre>
+            </div>
+            <p>All good now! <strong>No?</strong></p>
+            <pre><code class="language-console" data-lang="console"> FAIL  __tests__/application_process/steps/delete.js
+  Step functions
+    ✕ should be able to create a step (158 ms)
+
+  ● Step functions › should be able to create a step
+
+    expect(received).toMatchObject(expected)
+
+    - Expected  - 0
+    + Received  + 4
+</code></pre>
+            <p>Oh, ok, we just don&rsquo;t know how to use Jest&rsquo;s <a href="https://jestjs.io/docs/expect#tomatchobjectobject">expect.toMatchObject</a> properly. Right?</p>
+            <p>Let&rsquo;s build a Minimum Reproducible Example to confirm:</p>
+            <div class="highlight">
+              <pre tabindex="0" style="color: #f8f8f2; background-color: #272822; -moz-tab-size: 4; -o-tab-size: 4; tab-size: 4"><code class="language-js" data-lang="js"><span style="color:#a6e22e">describe</span>(<span style="color:#e6db74">&#39;Step functions&#39;</span>, () =&gt; {
+    <span style="color:#a6e22e">it</span>(<span style="color:#e6db74">&#39;should match a partial object&#39;</span>, ()=&gt;{
+        <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">received</span> <span style="color:#f92672">=</span> { <span style="color:#a6e22e">abc</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#39;def&#39;</span>, <span style="color:#a6e22e">hij</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#39;klm&#39;</span> }
+        <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">expected</span> <span style="color:#f92672">=</span> { <span style="color:#a6e22e">abc</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#39;def&#39;</span> }
+        <span style="color:#a6e22e">expect</span>(<span style="color:#a6e22e">received</span>).<span style="color:#a6e22e">toMatchObject</span>(<span style="color:#a6e22e">expected</span>)
+    }),
+    <span style="color:#a6e22e">it</span>(<span style="color:#e6db74">&#39;should be able to create a step&#39;</span>, <span style="color:#66d9ef">async</span> () =&gt; {
+      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">step</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">StepsContext</span>.<span style="color:#a6e22e">create</span>(<span style="color:#a6e22e">stepBody</span>)
+      <span style="color:#a6e22e">expect</span>(<span style="color:#a6e22e">step</span>).<span style="color:#a6e22e">toMatchObject</span>(<span style="color:#a6e22e">stepBody</span>)
+    })
+})
+</code></pre>
+            </div>
+            <p>Oh dear, the partial object experiment passes, but our Steps test still fails:</p>
+            <pre><code class="language-console" data-lang="console">FAIL  __tests__/application_process/steps/delete.js
+  Step functions
+    ✓ should match a partial object (1 ms)
+    ✕ should be able to create a step (158 ms)
+
+  ● Step functions › should be able to create a step
+
+    expect(received).toMatchObject(expected)
+
+    - Expected  - 0
+    + Received  + 4
+</code></pre>
+            <p>Something is not as it seems!</p>
+            <p>Let&rsquo;s experiment a bit more. What about if we just target a known property of a successfully created document, and check that it&rsquo;s there on the return:</p>
+            <div class="highlight">
+              <pre tabindex="0" style="color: #f8f8f2; background-color: #272822; -moz-tab-size: 4; -o-tab-size: 4; tab-size: 4"><code class="language-js" data-lang="js"><span style="color:#a6e22e">describe</span>(<span style="color:#e6db74">&#39;Step functions&#39;</span>, () =&gt; {
+    <span style="color:#a6e22e">it</span>(<span style="color:#e6db74">&#39;should be able to create a step&#39;</span>, <span style="color:#66d9ef">async</span> () =&gt; {
+      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">step</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">StepsContext</span>.<span style="color:#a6e22e">create</span>(<span style="color:#a6e22e">stepBody</span>)
+      <span style="color:#a6e22e">expect</span>(<span style="color:#a6e22e">step</span>.<span style="color:#ae81ff">_</span><span style="color:#a6e22e">id</span>).<span style="color:#a6e22e">toHaveProperty</span>(<span style="color:#e6db74">&#39;_bsontype&#39;</span>, <span style="color:#e6db74">&#39;ObjectID&#39;</span>)
+    }
+}
+</code></pre>
+            </div>
+            <p>
+              Well, that works. <em><strong>And it fails when our input data fails validation</strong></em
+              >. Great! This doesn&rsquo;t feel good though.
+            </p>
+            <p>We aren&rsquo;t really testing that our object is being stored correctly, we&rsquo;re just testing that <strong>something</strong> is being stored.</p>
+            <!-- raw HTML omitted -->
+            <p>
+              <em><strong>Lesson eventually learned: keep dependencies up to date.</strong></em>
+            </p>
+            <!-- raw HTML omitted -->
+            <p>We have our MRE, so let&rsquo;s do some more research, and then ask Stack Overflow.</p>
+            <p>Fortunately the masterful <a href="https://stackoverflow.com/users/3001761/jonrsharpe">Textbook / Jon Sharpe</a> could point me to an answer. No doubt shocked that I&rsquo;d turned up with an MRE this time, rather than a typical cry of &ldquo;Help! It doesn&rsquo;t work!&rdquo;, he kindly discovered and pointed me to another poor soul stuck in the same problem: <a href="https://stackoverflow.com/q/61217935/15991582">https://stackoverflow.com/q/61217935/15991582</a> .</p>
+            <h3 id="you-cannot-simply-compare-a-mongoose-object-with-a-vanilla-js-object-with-the-same-enumerable-properties">You cannot simply compare a mongoose object with a vanilla JS object with the same enumerable properties.</h3>
+            <p>Experienced readers will know this, but for those more my level, try:</p>
+            <div class="highlight">
+              <pre tabindex="0" style="color: #f8f8f2; background-color: #272822; -moz-tab-size: 4; -o-tab-size: 4; tab-size: 4"><code class="language-js" data-lang="js"><span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#66d9ef">new</span> <span style="color:#a6e22e">MongooseModel</span>(<span style="color:#a6e22e">data</span>).<span style="color:#a6e22e">save</span>())
+</code></pre>
+            </div>
+            <p>There&rsquo;s a lot there. No wonder it didn&rsquo;t match.</p>
+            <p>Fortunately there&rsquo;s a solution. Use the Mongoose object&rsquo;s <code>.toJSON()</code> method to clean things up:</p>
+            <div class="highlight">
+              <pre tabindex="0" style="color: #f8f8f2; background-color: #272822; -moz-tab-size: 4; -o-tab-size: 4; tab-size: 4"><code class="language-js" data-lang="js"><span style="color:#a6e22e">describe</span>(<span style="color:#e6db74">&#39;Step functions&#39;</span>, () =&gt; {
+    <span style="color:#a6e22e">it</span>(<span style="color:#e6db74">&#39;should be able to create a step&#39;</span>, <span style="color:#66d9ef">async</span> () =&gt; {
+      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">step</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">StepsContext</span>.<span style="color:#a6e22e">create</span>(<span style="color:#a6e22e">stepBody</span>)
+      <span style="color:#a6e22e">expect</span>(<span style="color:#a6e22e">step</span>.<span style="color:#a6e22e">toJSON</span>()).<span style="color:#a6e22e">toMatchObject</span>(<span style="color:#a6e22e">stepBody</span>)
+    })
+})
+</code></pre>
+            </div>
+            <p>That gets us closer! Great!</p>
+            <p>Unfortunately, the date properties are still not converted to JS <code>Date</code>s or strings, so there&rsquo;s a little more to do. We could get smart and do this by looping through the Object.Keys(stepJSON), but this is a test, so let&rsquo;s keep things simple:</p>
+            <div class="highlight">
+              <pre tabindex="0" style="color: #f8f8f2; background-color: #272822; -moz-tab-size: 4; -o-tab-size: 4; tab-size: 4"><code class="language-js" data-lang="js"><span style="color:#a6e22e">describe</span>(<span style="color:#e6db74">&#39;Step functions&#39;</span>, () =&gt; {
+  <span style="color:#a6e22e">it</span>(<span style="color:#e6db74">&#39;should create a step&#39;</span>, <span style="color:#66d9ef">async</span> () =&gt; {
+    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">step</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">StepsContext</span>.<span style="color:#a6e22e">create</span>(<span style="color:#a6e22e">stepBody</span>)
+    <span style="color:#75715e">// return from .create() matches stepdata content
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">stepJsObject</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">step</span>.<span style="color:#a6e22e">toJSON</span>()
+    <span style="color:#a6e22e">stepJsObject</span>.<span style="color:#a6e22e">eligibilityFromDate</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">step</span>.<span style="color:#a6e22e">eligibilityFromDate</span>.<span style="color:#a6e22e">toJSON</span>()
+    <span style="color:#a6e22e">stepJsObject</span>.<span style="color:#a6e22e">eligibilityToDate</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">step</span>.<span style="color:#a6e22e">eligibilityToDate</span>.<span style="color:#a6e22e">toJSON</span>()
+    <span style="color:#a6e22e">expect</span>(<span style="color:#a6e22e">stepJsObject</span>).<span style="color:#a6e22e">toMatchObject</span>(<span style="color:#a6e22e">stepBody</span>)
+    <span style="color:#75715e">// return from .create() has a mongoDB ID
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">expect</span>(<span style="color:#a6e22e">step</span>.<span style="color:#ae81ff">_</span><span style="color:#a6e22e">id</span>).<span style="color:#a6e22e">toHaveProperty</span>(<span style="color:#e6db74">&#39;_bsontype&#39;</span>, <span style="color:#e6db74">&#39;ObjectID&#39;</span>)
+  })
+}
+</code></pre>
+            </div>
+            <p>So: <a href="#tldr">Learn the lessons in the TLDR!</a></p>
+            <!-- raw HTML omitted -->
+            <div class="postmeta-foot">
+              <div class="columns">
+                <div class="column">
+                  <div class="categories">
+                    <span class="catlabel"><strong>Categories:</strong></span>
+                    <ul>
+                      <li><a href="https://DBBrowne.github.io/blog/categories/jest/">Jest</a></li>
+                      <li><a href="https://DBBrowne.github.io/blog/categories/mongoose/">Mongoose</a></li>
+                      <li><a href="https://DBBrowne.github.io/blog/categories/mongodb/">MongoDB</a></li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="column"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <footer class="footer">
+      <div class="container">
+        <div class="content has-text-centered">
+          <p>&copy; Duncan Browne. Themed with <a href="https://github.com/ryanburnette/eon" target="_blank">eon</a>. Built with <a href="https://bliss.js.org" target="_blank">Bliss ✨</a></p>
+        </div>
+      </div>
+    </footer>
+    <script src="https://DBBrowne.github.io/blog/main.js"></script>
+  </body>
+</html>

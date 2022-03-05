@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Reduce on Duncan Browne</title>
+    <link>https://DBBrowne.github.io/blog/categories/reduce/</link>
+    <description>Recent content in Reduce on Duncan Browne</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <managingEditor>gh@dbb.tools (Duncan Browne)</managingEditor>
+    <webMaster>gh@dbb.tools (Duncan Browne)</webMaster>
+    <copyright>© Duncan Browne</copyright>
+    <lastBuildDate>Mon, 28 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://DBBrowne.github.io/blog/categories/reduce/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>A beginner&#39;s look at Promises and Reduce</title>
+      <link>https://DBBrowne.github.io/blog/blog/beginner-promises-and-reduce/</link>
+      <pubDate>Mon, 28 Feb 2022 00:00:00 +0000</pubDate>
+      <author>gh@dbb.tools (Duncan Browne)</author>
+      <guid>https://DBBrowne.github.io/blog/blog/beginner-promises-and-reduce/</guid>
+      <description>A beginners look at Promises and Reduce  Async functions return a promise. Reduce&amp;rsquo;s first parameter is previous, not accumulator.
+ With thanks to AJ ONeal, for his infinite patience with junior engineers.
+TLDR The async keyword causes a function to return a Promise. No further returns needed. The first argument passed to the reducer function in Array#reduce(reducerFn, initial) is previous, not accumulator. Parallel Promises We&amp;rsquo;ve all looked at JS&amp;rsquo;s awaits and thought; &amp;ldquo;well, those are off waiting outside the main stack, so why not fire off several at once?</description>
+    </item>
+    
+  </channel>
+</rss>

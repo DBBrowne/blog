@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Duncan Browne</title>
+    <link>https://DBBrowne.github.io/blog/</link>
+    <description>Recent content on Duncan Browne</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <managingEditor>gh@dbb.tools (Duncan Browne)</managingEditor>
+    <webMaster>gh@dbb.tools (Duncan Browne)</webMaster>
+    <copyright>© Duncan Browne</copyright>
+    <lastBuildDate>Tue, 01 Mar 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://DBBrowne.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>A pure CSS burger menu</title>
+      <link>https://DBBrowne.github.io/blog/blog/pure-css-burger-menu/</link>
+      <pubDate>Tue, 01 Mar 2022 00:00:00 +0000</pubDate>
+      <author>gh@dbb.tools (Duncan Browne)</author>
+      <guid>https://DBBrowne.github.io/blog/blog/pure-css-burger-menu/</guid>
+      <description>A pure CSS burger menu  No JS, works on mobile!
+ Just because it&amp;rsquo;s interesting, let&amp;rsquo;s make a burger menu, without using JS to handle hiding/showing the menu content.
+What&amp;rsquo;re we going to do?
+ Set up a nav menu. Move that menu off the side of the viewport, so it can&amp;rsquo;t be seen. Add a hamburger icon to that nav menu that will remain on screen. When we hover (or tap on mobile), we&amp;rsquo;ll bring the menu back onto the screen, and hide the hamburger.</description>
+    </item>
+    
+    <item>
+      <title>A beginner&#39;s look at Promises and Reduce</title>
+      <link>https://DBBrowne.github.io/blog/blog/beginner-promises-and-reduce/</link>
+      <pubDate>Mon, 28 Feb 2022 00:00:00 +0000</pubDate>
+      <author>gh@dbb.tools (Duncan Browne)</author>
+      <guid>https://DBBrowne.github.io/blog/blog/beginner-promises-and-reduce/</guid>
+      <description>A beginners look at Promises and Reduce  Async functions return a promise. Reduce&amp;rsquo;s first parameter is previous, not accumulator.
+ With thanks to AJ ONeal, for his infinite patience with junior engineers.
+TLDR The async keyword causes a function to return a Promise. No further returns needed. The first argument passed to the reducer function in Array#reduce(reducerFn, initial) is previous, not accumulator. Parallel Promises We&amp;rsquo;ve all looked at JS&amp;rsquo;s awaits and thought; &amp;ldquo;well, those are off waiting outside the main stack, so why not fire off several at once?</description>
+    </item>
+    
+    <item>
+      <title>An adventure in automated testing with Jest and Mongoose</title>
+      <link>https://DBBrowne.github.io/blog/blog/an-adventure-in-automated-testing-with-jest-and-mongoose/</link>
+      <pubDate>Sun, 27 Feb 2022 00:00:00 +0000</pubDate>
+      <author>gh@dbb.tools (Duncan Browne)</author>
+      <guid>https://DBBrowne.github.io/blog/blog/an-adventure-in-automated-testing-with-jest-and-mongoose/</guid>
+      <description>An adventure in automated testing with Jest and Mongoose  Beginner pitfalls with building automated tests that compare JS objects with mongoose objects.
+ With thanks to Jon Sharpe, who kindly pointed me to the problem and solution here.
+TLDR Mongoose dates != JS Dates Mongoose objects != JS objects. Use expect(mongooseObject.toJSON()).toMatchObject(jsObject) If you have dates, fix up your mongooseObject.toJSON() by replacing any date properties with mongooseObjectJson.dateProperty = mongooseObject.dateProperty.toJSON() Keep your dependencies up to date.</description>
+    </item>
+    
+    <item>
+      <title>About</title>
+      <link>https://DBBrowne.github.io/blog/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <author>gh@dbb.tools (Duncan Browne)</author>
+      <guid>https://DBBrowne.github.io/blog/about/</guid>
+      <description>This is just a placeholder blog site.
+Come visit me at dbb.tools for more.</description>
+    </item>
+    
+    <item>
+      <title>Contact</title>
+      <link>https://DBBrowne.github.io/blog/contact/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <author>gh@dbb.tools (Duncan Browne)</author>
+      <guid>https://DBBrowne.github.io/blog/contact/</guid>
+      <description>portfolio@dbb.tools \
+linkedin.com/in/duncan-browne/
+dbb.tools
+London + Remote
+U.K.\</description>
+    </item>
+    
+  </channel>
+</rss>

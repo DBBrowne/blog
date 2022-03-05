@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>A pure CSS burger menu - Duncan Browne</title>
+    <meta name="viewport" content="width=device-width" />
+    <meta name="git_repo" content="https://github.com/DBBrowne/blog" />
+    <meta name="git_host" content="github" />
+    <meta name="git_branch" content="main" />
+    <meta name="content_path" content="content" />
+    <link rel="stylesheet" href="https://DBBrowne.github.io/blog/style.css" />
+  </head>
+  <body>
+    <div class="main">
+      <header class="header">
+        <div class="brand content">
+          <h1>
+            <a href="https://DBBrowne.github.io/blog">Duncan Browne</a>
+          </h1>
+        </div>
+        <nav class="navbar">
+          <ul>
+            <li><a href="https://DBBrowne.github.io/blog">Home</a></li>
+            <li><a href="https://DBBrowne.github.io/blog/blog">Blog</a></li>
+          </ul>
+        </nav>
+      </header>
+      <section class="section default-single">
+        <div class="container">
+          <div class="content">
+            <div class="postmeta-head">
+              <p>
+                <span class="author">
+                  <img class="gravatar" src="https://www.gravatar.com/avatar/9598a7692b4d759110c8e736a9039094?s=64&d=identicon" />
+                  <span class="name">Duncan Browne</span>
+                </span>
+                <span class="date">March 1, 2022</span>
+                <span class="edit" style=""><a href="https://github.com/DBBrowne/blog/edit/main/content/blog/pure-css-burger-menu.md" style="color: #485fc7" target="_blank">Suggest Edit</a></span>
+              </p>
+            </div>
+            <div class="single-title">
+              <h1 class="title"><a href="https://DBBrowne.github.io/blog/blog/pure-css-burger-menu/">A pure CSS burger menu</a></h1>
+            </div>
+            <h1 id="a-pure-css-burger-menu">A pure CSS burger menu</h1>
+            <blockquote>
+              <p>No JS, works on mobile!</p>
+            </blockquote>
+            <p>Just because it&rsquo;s interesting, let&rsquo;s make a burger menu, without using JS to handle hiding/showing the menu content.</p>
+            <p>What&rsquo;re we going to do?</p>
+            <ol>
+              <li>Set up a nav menu.</li>
+              <li>Move that menu off the side of the viewport, so it can&rsquo;t be seen.</li>
+              <li>Add a hamburger icon to that nav menu that will remain on screen. When we hover (or tap on mobile), we&rsquo;ll bring the menu back onto the screen, and hide the hamburger.</li>
+            </ol>
+            <p>First, let&rsquo;s lay out our menu content:</p>
+            <div class="highlight">
+              <pre tabindex="0" style="color: #f8f8f2; background-color: #272822; -moz-tab-size: 4; -o-tab-size: 4; tab-size: 4"><code class="language-html" data-lang="html">  &lt;<span style="color:#f92672">nav</span>&gt;
+    &lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;menu-content&#34;</span>&gt;
+      &lt;<span style="color:#f92672">img</span> 
+        <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;http://tiny.cc/em2puz&#34;</span>
+        <span style="color:#a6e22e">alt</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Unsplash is fantastic.  Check them out at the img src.&#34;</span> 
+        <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;nav-logo&#34;</span>
+      /&gt;
+    &lt;<span style="color:#f92672">ul</span>&gt;
+      &lt;<span style="color:#f92672">li</span>&gt;&lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;#&#34;</span>&gt;Link 1&lt;/<span style="color:#f92672">a</span>&gt;&lt;/<span style="color:#f92672">li</span>&gt;
+      &lt;<span style="color:#f92672">li</span>&gt;&lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;#&#34;</span>&gt;Link 2&lt;/<span style="color:#f92672">a</span>&gt;&lt;/<span style="color:#f92672">li</span>&gt;
+      &lt;<span style="color:#f92672">li</span>&gt;&lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;#&#34;</span>&gt;Link 3&lt;/<span style="color:#f92672">a</span>&gt;&lt;/<span style="color:#f92672">li</span>&gt;
+    &lt;/<span style="color:#f92672">ul</span>&gt;
+    &lt;/<span style="color:#f92672">div</span>&gt;
+    &lt;<span style="color:#f92672">h2</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;burger-button&#34;</span>&gt;❰❰&lt;/<span style="color:#f92672">h2</span>&gt;
+  &lt;/<span style="color:#f92672">nav</span>&gt;
+</code></pre>
+            </div>
+            <p>It&rsquo;s nice and simple to use a couple of unicode chevrons for our burger menu, but we could swap anything we like into the &ldquo;burger-button&rdquo; element&rsquo;s position. As long as we can control its width.</p>
+            <blockquote>
+              <p>We don&rsquo;t actually need to control its width, but doing so reduces the trial-and-error necessary for getting the hamburger icon positioned neatly.</p>
+            </blockquote>
+            <p>We can put anything we like in the menu, but it&rsquo;s useful to have an element with a known width (and margin and padding) defining the overall width of the menu, so we can move it around accurately.</p>
+            <p>Speaking of styling, let&rsquo;s set some basic dimensions. Using rem as a unit is helpful for resizing things basic on a single code unit (the base text size). We&rsquo;re using two text characters for our logo, so we can set its font size, and know that the &ldquo;logo&rdquo; is <code>font size * 2</code> wide.</p>
+            <div class="highlight">
+              <pre tabindex="0" style="color: #f8f8f2; background-color: #272822; -moz-tab-size: 4; -o-tab-size: 4; tab-size: 4"><code class="language-css" data-lang="css">:<span style="color:#a6e22e">root</span>{
+  --nav-logo-width: <span style="color:#ae81ff">5</span><span style="color:#66d9ef">rem</span>;
+  --nav-logo-margin: <span style="color:#ae81ff">1</span><span style="color:#66d9ef">rem</span>;
+
+  --burger-icon-width: <span style="color:#ae81ff">2</span><span style="color:#66d9ef">rem</span>;
+}
+.<span style="color:#a6e22e">nav-logo</span>{
+  <span style="color:#66d9ef">width</span>: <span style="color:#a6e22e">var</span>(<span style="color:#f92672">--</span>nav<span style="color:#f92672">-</span>logo<span style="color:#f92672">-</span>width);
+  <span style="color:#66d9ef">margin</span>: <span style="color:#a6e22e">var</span>(<span style="color:#f92672">--</span>nav<span style="color:#f92672">-</span>logo<span style="color:#f92672">-</span>margin);
+}
+.<span style="color:#a6e22e">burger-button</span>{
+  <span style="color:#66d9ef">font-size</span>: <span style="color:#a6e22e">var</span>(<span style="color:#f92672">--</span>burger<span style="color:#f92672">-</span><span style="color:#66d9ef">icon</span><span style="color:#f92672">-</span>width);
+}
+</code></pre>
+            </div>
+            <p>Next up, let&rsquo;s get our nav bar stacked up neatly, and over to the beginning of our screen: Rtl rendering breaks this thoroughly at the moment, so I&rsquo;ll be sticking with left and right from here on.</p>
+            <div class="highlight">
+              <pre tabindex="0" style="color: #f8f8f2; background-color: #272822; -moz-tab-size: 4; -o-tab-size: 4; tab-size: 4"><code class="language-css" data-lang="css"><span style="color:#f92672">nav</span>{
+  <span style="color:#66d9ef">display</span>: <span style="color:#66d9ef">flex</span>;
+  <span style="color:#66d9ef">position</span>:<span style="color:#66d9ef">fixed</span>;
+}
+</code></pre>
+            </div>
+            <h4 id="great--weve-got-a-menu-laid-out-with-an-icon-next-to-it">Great! We&rsquo;ve got a menu laid out, with an icon next to it.</h4>
+            <p><img src="https://user-images.githubusercontent.com/72463218/156226555-95502eb1-9f4b-4e3f-8e05-ed36e53e78e5.png" alt="basic nav layout" /></p>
+            <p>Now, let&rsquo;s shove our menu off the screen:</p>
+            <div class="highlight">
+              <pre tabindex="0" style="color: #f8f8f2; background-color: #272822; -moz-tab-size: 4; -o-tab-size: 4; tab-size: 4"><code class="language-css" data-lang="css"><span style="color:#f92672">nav</span>{
+  <span style="color:#66d9ef">right</span>: calc(<span style="color:#ae81ff">100</span><span style="color:#66d9ef">vw</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">var</span>(<span style="color:#f92672">--</span>burger<span style="color:#f92672">-</span><span style="color:#66d9ef">icon</span><span style="color:#f92672">-</span>width));
+}
+</code></pre>
+            </div>
+            <p>Nice and easy:</p>
+            <ol>
+              <li>Push the whole nav element over until its right hand side (<code>right:</code>) is the entire view port away from the right hand side of the screen (<code>100vw</code>)</li>
+              <li>Bring it back by the width of our burger icon (<code>var(--burger-icon-width)</code>)</li>
+            </ol>
+            <p>Finally, when we hover our logo (or tap it on mobile, which engages the <code>:hover</code> pseudo selector), let&rsquo;s bring the nav menu back (and hide the burger button).</p>
+            <blockquote>
+              <p>We need to make sure that we don&rsquo;t move the nav element too far from the side of the screen, or the <code>:hover</code> state will be disengaged as soon as it engages, and we&rsquo;ll be stuck with a nav bar flashing between the two states. Not pretty!</p>
+            </blockquote>
+            <blockquote>
+              <p>Handling of :hover, :focus, and :active states has changed a lot over the last few years. Check out <a href="https://bitsofco.de/when-do-the-hover-focus-and-active-pseudo-classes-apply/">https://bitsofco.de/when-do-the-hover-focus-and-active-pseudo-classes-apply/</a> for an interesting discussion.</p>
+            </blockquote>
+            <div class="highlight">
+              <pre tabindex="0" style="color: #f8f8f2; background-color: #272822; -moz-tab-size: 4; -o-tab-size: 4; tab-size: 4"><code class="language-css" data-lang="css"><span style="color:#f92672">nav</span>:<span style="color:#a6e22e">hover</span>{
+  <span style="color:#66d9ef">right</span>: <span style="color:#66d9ef">unset</span>;
+}
+<span style="color:#f92672">nav</span>:<span style="color:#a6e22e">hover</span> .<span style="color:#a6e22e">burger-button</span>{
+  <span style="color:#66d9ef">display</span>: <span style="color:#66d9ef">none</span>;
+}
+</code></pre>
+            </div>
+            <p>Clean again!</p>
+            <ol>
+              <li>Unset the <code>right</code> property on the nav menu, to bring it back to its default <code>fixed</code> position.</li>
+              <li>With the hover state active on the nav menu, hide the burger button.</li>
+            </ol>
+            <h4 id="all-done">All done!</h4>
+            <p>Now, let&rsquo;s get it looking tolerable.</p>
+            <p>Let&rsquo;s give our menu a background colour so we can see it over our content, and z-index it to make sure of that.</p>
+            <div class="highlight">
+              <pre tabindex="0" style="color: #f8f8f2; background-color: #272822; -moz-tab-size: 4; -o-tab-size: 4; tab-size: 4"><code class="language-css" data-lang="css">:<span style="color:#a6e22e">root</span>{
+  --color-bg: <span style="color:#66d9ef">lightgray</span>;
+}
+<span style="color:#f92672">nav</span>{
+  <span style="color:#66d9ef">z-index</span>: <span style="color:#ae81ff">10</span>;
+}
+<span style="color:#f92672">nav</span> .<span style="color:#a6e22e">menu-content</span>{
+  <span style="color:#66d9ef">background-color</span>: <span style="color:#a6e22e">var</span>(<span style="color:#f92672">--</span><span style="color:#66d9ef">color</span><span style="color:#f92672">-</span>bg);
+}
+</code></pre>
+            </div>
+            <p>Reduce opacity of our hamburger, so we can see our content behind it whilst keeping all of our screen real estate:</p>
+            <div class="highlight">
+              <pre tabindex="0" style="color: #f8f8f2; background-color: #272822; -moz-tab-size: 4; -o-tab-size: 4; tab-size: 4"><code class="language-css" data-lang="css">.<span style="color:#a6e22e">burger-button</span>{
+  <span style="color:#66d9ef">opacity</span>: <span style="color:#ae81ff">0.6</span>;
+}
+</code></pre>
+            </div>
+            <h3 id="and-bring-it-all-together">And bring it all together:</h3>
+            <p><a href="https://codepen.io/dbbrowne/pen/NWwEXGo">https://codepen.io/dbbrowne/pen/NWwEXGo</a></p>
+            <p>Things work for now, but some some easing of the movements would be nice. And a slightly prettier menu.</p>
+            <p>What we&rsquo;d like is to just put an animation on the movement as the navbar slides in. Something like:</p>
+            <div class="highlight">
+              <pre tabindex="0" style="color: #f8f8f2; background-color: #272822; -moz-tab-size: 4; -o-tab-size: 4; tab-size: 4"><code class="language-css" data-lang="css">:<span style="color:#a6e22e">root</span>{
+  --nav-transition-duration: <span style="color:#ae81ff">0.5</span><span style="color:#66d9ef">s</span> <span style="color:#66d9ef">ease</span>;
+}
+<span style="color:#f92672">nav</span>{
+  <span style="color:#66d9ef">transition</span>: <span style="color:#66d9ef">right</span> <span style="color:#a6e22e">var</span>(<span style="color:#f92672">--</span>nav<span style="color:#f92672">-</span>transition<span style="color:#f92672">-</span>duration);
+}
+</code></pre>
+            </div>
+            <p>
+              But unfortunately, it&rsquo;s not that simple. Transitions only seem to work if the CSS has a defined position to work to/from. Restoring our nav bar with <code>right: unset;</code> breaks this.<br />
+              We need to replace our <code>nav:hover</code> styling:
+            </p>
+            <div class="highlight">
+              <pre tabindex="0" style="color: #f8f8f2; background-color: #272822; -moz-tab-size: 4; -o-tab-size: 4; tab-size: 4"><code class="language-css" data-lang="css"><span style="color:#f92672">nav</span>:<span style="color:#a6e22e">hover</span>{
+  <span style="color:#66d9ef">right</span>: calc(<span style="color:#ae81ff">100</span><span style="color:#66d9ef">vw</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">var</span>(<span style="color:#f92672">--</span>nav<span style="color:#f92672">-</span>logo<span style="color:#f92672">-</span>width) <span style="color:#f92672">-</span> <span style="color:#a6e22e">var</span>(<span style="color:#f92672">--</span>nav<span style="color:#f92672">-</span>logo<span style="color:#f92672">-</span>margin)<span style="color:#f92672">*</span><span style="color:#ae81ff">2</span>);
+}
+</code></pre>
+            </div>
+            <p>We need to keep the property we use for positioning consistent to use <code>transition</code>, so we need to define the &ldquo;on-screen&rdquo; position relative to <code>right</code>. So, assuming that the logo is the width-defining feature of the nav bar..</p>
+            <ol>
+              <li><code>100vw</code> - 100% of the viewport away from the right hand side&hellip;</li>
+              <li><code>- var(--nav-logo-width)</code> - less one logo width&hellip;</li>
+              <li><code>- var(--nav-logo-margin)*2</code> - and less both margin widths&hellip;</li>
+              <li>any other adjustments for padding/margins given our specific situation.</li>
+            </ol>
+            <p>We might make life easier here by fixing the width of the nav bar directly, and then sizing its contents to suit. Up to you!</p>
+            <h3 id="with-simple-animations">With simple animations:</h3>
+            <p><a href="https://codepen.io/dbbrowne/pen/XWzyVRK">https://codepen.io/dbbrowne/pen/XWzyVRK</a></p>
+            <p>There are still a few things to think about - accessibility and screen readers may not be well served by this approach. Please give me some advice in the comments about how to handle this.</p>
+            <p>We can also make our nav bar a little slicker. If we&rsquo;re using something like <em>React Router</em>&rsquo;s <a href="https://v5.reactrouter.com/web/api/NavLink">NavLink</a>, then the currently active link will have an <code>active</code> class. If we then move our burger icon into the link, we can give our user an indication of where they are:</p>
+            <div class="highlight">
+              <pre tabindex="0" style="color: #f8f8f2; background-color: #272822; -moz-tab-size: 4; -o-tab-size: 4; tab-size: 4"><code class="language-jsx" data-lang="jsx">&lt;<span style="color:#f92672">NavLink</span> <span style="color:#a6e22e">to</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;url&#34;</span>&gt;
+  &lt;<span style="color:#f92672">span</span>&gt;<span style="color:#a6e22e">link</span> <span style="color:#a6e22e">title</span>&lt;/<span style="color:#f92672">span</span>&gt;
+  &lt;<span style="color:#f92672">LeftArrow</span> /&gt;
+&lt;/<span style="color:#f92672">NavLink</span>&gt;
+</code></pre>
+            </div>
+            <div class="highlight">
+              <pre tabindex="0" style="color: #f8f8f2; background-color: #272822; -moz-tab-size: 4; -o-tab-size: 4; tab-size: 4"><code class="language-css" data-lang="css"><span style="color:#f92672">a</span>.<span style="color:#a6e22e">active</span>{
+  <span style="color:#66d9ef">background-color</span>: <span style="color:#a6e22e">var</span>(<span style="color:#f92672">--</span>nav<span style="color:#f92672">-</span><span style="color:#66d9ef">color</span><span style="color:#f92672">-</span>active);
+}
+</code></pre>
+            </div>
+            <p><img src="https://user-images.githubusercontent.com/72463218/156239739-ba76eefc-d217-49ba-8556-0d7688e9f92e.gif" alt="navbar demo" /></p>
+            <!-- raw HTML omitted -->
+            <p>Check out the latest version at dbb.tools, or as it is in the animation above <a href="https://github.com/DBBrowne/portfolio/blob/66938b3402a0e4dd4e504aa271b84baa56d1cd87/src/containers/common/Nav.js#L37-L38">on github</a>.</p>
+            <p>Thanks for your time, please do offer advice in the comments, or over LinkedIn!</p>
+            <div class="postmeta-foot">
+              <div class="columns">
+                <div class="column">
+                  <div class="categories">
+                    <span class="catlabel"><strong>Categories:</strong></span>
+                    <ul>
+                      <li><a href="https://DBBrowne.github.io/blog/categories/html/">HTML</a></li>
+                      <li><a href="https://DBBrowne.github.io/blog/categories/css/">CSS</a></li>
+                      <li><a href="https://DBBrowne.github.io/blog/categories/responsive/">responsive</a></li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="column"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <footer class="footer">
+      <div class="container">
+        <div class="content has-text-centered">
+          <p>&copy; Duncan Browne. Themed with <a href="https://github.com/ryanburnette/eon" target="_blank">eon</a>. Built with <a href="https://bliss.js.org" target="_blank">Bliss ✨</a></p>
+        </div>
+      </div>
+    </footer>
+    <script src="https://DBBrowne.github.io/blog/main.js"></script>
+  </body>
+</html>

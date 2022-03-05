@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>A beginner&#39;s look at Promises and Reduce - Duncan Browne</title>
+    <meta name="viewport" content="width=device-width" />
+    <meta name="git_repo" content="https://github.com/DBBrowne/blog" />
+    <meta name="git_host" content="github" />
+    <meta name="git_branch" content="main" />
+    <meta name="content_path" content="content" />
+    <link rel="stylesheet" href="https://DBBrowne.github.io/blog/style.css" />
+  </head>
+  <body>
+    <div class="main">
+      <header class="header">
+        <div class="brand content">
+          <h1>
+            <a href="https://DBBrowne.github.io/blog">Duncan Browne</a>
+          </h1>
+        </div>
+        <nav class="navbar">
+          <ul>
+            <li><a href="https://DBBrowne.github.io/blog">Home</a></li>
+            <li><a href="https://DBBrowne.github.io/blog/blog">Blog</a></li>
+          </ul>
+        </nav>
+      </header>
+      <section class="section default-single">
+        <div class="container">
+          <div class="content">
+            <div class="postmeta-head">
+              <p>
+                <span class="author">
+                  <img class="gravatar" src="https://www.gravatar.com/avatar/9598a7692b4d759110c8e736a9039094?s=64&d=identicon" />
+                  <span class="name">Duncan Browne</span>
+                </span>
+                <span class="date">February 28, 2022</span>
+                <span class="edit" style=""><a href="https://github.com/DBBrowne/blog/edit/main/content/blog/beginner-promises-and-reduce.md" style="color: #485fc7" target="_blank">Suggest Edit</a></span>
+              </p>
+            </div>
+            <div class="single-title">
+              <h1 class="title"><a href="https://DBBrowne.github.io/blog/blog/beginner-promises-and-reduce/">A beginner&#39;s look at Promises and Reduce</a></h1>
+            </div>
+            <h1 id="a-beginners-look-at-promises-and-reduce">A beginners look at Promises and Reduce</h1>
+            <blockquote>
+              <p>
+                Async functions return a promise. Reduce&rsquo;s first parameter is <em><strong>previous</strong></em
+                >, not <em>accumulator</em>.
+              </p>
+            </blockquote>
+            <p>With thanks to <a href="https://github.com/coolaj86">AJ ONeal</a>, for his infinite patience with junior engineers.</p>
+            <!-- raw HTML omitted -->
+            <h2 id="tldr">TLDR</h2>
+            <h3 id="the-async-keyword-causes-a-function-to-return-a-promise--no-further-returns-needed">The async keyword causes a function to return a Promise. No further returns needed.</h3>
+            <h3 id="the-first-argument-passed-to-the-reducer-function-in-arrayreducereducerfn-initial-is-previous-not-accumulator">The first argument passed to the reducer function in Array#reduce(reducerFn, initial) is <em>previous</em>, not <em>accumulator</em>.</h3>
+            <!-- raw HTML omitted -->
+            <h2 id="parallel-promises">Parallel Promises</h2>
+            <p>We&rsquo;ve all looked at JS&rsquo;s <code>await</code>s and thought; &ldquo;well, those are off waiting outside the main stack, so why not fire off several at once?&rdquo;</p>
+            <p><code>Promise.all()</code> is there for us, great for the right situations, but is probably a good route to network, disk, and/or CPU thrashing if you don&rsquo;t have infinite throughput and processing power. And it assumes that our awaits are all independent.</p>
+            <h2 id="promise-chains">Promise Chains</h2>
+            <p>What if we want to take a set of async actions, one after another?</p>
+            <p>Enter a neat implementation of a method to run async tasks in sequence, care of <a href="https://github.com/coolaj86/AJScript/issues/10">AJScript</a>:</p>
+            <div class="highlight">
+              <pre tabindex="0" style="color: #f8f8f2; background-color: #272822; -moz-tab-size: 4; -o-tab-size: 4; tab-size: 4"><code class="language-js" data-lang="js">Promise.<span style="color:#ae81ff">_</span><span style="color:#a6e22e">forEach</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">async</span> <span style="color:#66d9ef">function</span> (<span style="color:#a6e22e">arr</span>, <span style="color:#a6e22e">fn</span>) {
+    <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">arr</span>.<span style="color:#a6e22e">reduce</span>(<span style="color:#66d9ef">async</span> <span style="color:#66d9ef">function</span> (<span style="color:#a6e22e">promise</span>, <span style="color:#a6e22e">el</span>, <span style="color:#a6e22e">i</span>) {
+        <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">promise</span>;
+        <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">fn</span>(<span style="color:#a6e22e">el</span>, <span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">arr</span>);
+    }, Promise.<span style="color:#a6e22e">resolve</span>());
+};
+</code></pre>
+            </div>
+            <p>My Junior engineer&rsquo;s mind got rather stuck here though:</p>
+            <ul>
+              <li>What does the Promise.resolve() in the initial do?</li>
+              <li>How on earth does the promise from each iteration get fed into Promise.resolve()?</li>
+              <li>Nothing is returned from the Reduce function. How does this do anything other than cause another one of those bugs where I&rsquo;ve forgotten to return inside an array method, and nothing happens.</li>
+            </ul>
+            <p>After a lot of digging, and a lot of advice from <a href="https://github.com/coolaj86">AJ himself</a> and his <a href="https://www.youtube.com/channel/UC2KJHARTj6KRpKzLU1sVxBA">youtube channel</a>, I finally worked it out. Hopefully this is useful for other juniors!</p>
+            <p>My attempts to explore this knowledge gap are all up here: <a href="https://github.com/DBBrowne/code-challenges-public/blob/main/other/promise.foreach.js">https://github.com/DBBrowne/code-challenges-public/blob/main/other/promise.foreach.js</a></p>
+            <p>
+              <!-- raw HTML omitted --><!-- raw HTML omitted -->
+              The key lessons come from:
+            </p>
+            <h4 id="question">Question:</h4>
+            <h5 id="how-does-this-pass-back-to-the-acc-why-does-this-do-anything-other-than-resolve-the-initial-promiseprototyperesolve-to-undefined-and-then-sit-quietly">How does this pass back to the <code>acc</code>? Why does this do anything other than resolve the initial <code>Promise.prototype.resolve()</code> to undefined, and then sit quietly?</h5>
+            <h4 id="answer">Answer:</h4>
+            <p>
+              The function used as a reducer is async. By definition this returns a promise, which becomes the accumulator (better thought of as <code>previous</code> here) in the reducer.<br />
+              In fact, <em><strong>THERE IS NO ACCUMULATOR IN REDUCE</strong></em
+              >.
+            </p>
+            <p>The definition is <code>Array.prototype.reduce(function reducer (prev, current, index, array){}, initialValueForPrev)</code>.</p>
+            <p>
+              Sometimes we <code>return prev + current</code> from the reducer to make an accumulator, but that&rsquo;s an implementation.<br />
+              I couldn&rsquo;t get over the lack of a <code>return</code> inside <code>reducer</code>, and could not grasp how the promise from <code>await fn(el)</code> was getting into <code>prev</code>.<br />
+              It doesn&rsquo;t. A different promise is returned from the reducer function into the <code>prev</code> (the the promise from the reducer function). That promise is waiting for the <code>fn(el)</code> promise to resolve.
+            </p>
+            <!-- raw HTML omitted -->
+            <h4 id="question-1">Question:</h4>
+            <h5 id="how-does-each-iteration-get-passed-into-the-initial-promiseresolve">How does each iteration get passed into the initial Promise.resolve()?</h5>
+            <h4 id="answer-1">Answer:</h4>
+            <p>It doesn&rsquo;t.</p>
+            <p>
+              Reduce&rsquo;s default behaviour, with no second argument, is to use the first element of the array as the initial value.<br />
+              In this case, that would mean that the first <code>await promise</code> would <code>await arr[0]</code>, rather than <code>await fn(arr[0])</code>. <code>fn(arr[0])</code> would never run.<br />
+              The <code>initial</code> argument is only there to prevent Reduce using the first value in the array as the initial, and thereby failing to evaluate the passed <code>fn</code> for that value. The initial value could be anything other than <code>not defined</code>, including null or undefined.
+            </p>
+            <p>Promise.resolve() is chosen as the initial to indicate to the user that <code>prev</code> is a promise, and to ensure that the type of <code>prev</code> does not change between the first and subsequent iterations.</p>
+            <div class="postmeta-foot">
+              <div class="columns">
+                <div class="column">
+                  <div class="categories">
+                    <span class="catlabel"><strong>Categories:</strong></span>
+                    <ul>
+                      <li><a href="https://DBBrowne.github.io/blog/categories/javascript/">JavaScript</a></li>
+                      <li><a href="https://DBBrowne.github.io/blog/categories/promise/">Promise</a></li>
+                      <li><a href="https://DBBrowne.github.io/blog/categories/reduce/">Reduce</a></li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="column"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <footer class="footer">
+      <div class="container">
+        <div class="content has-text-centered">
+          <p>&copy; Duncan Browne. Themed with <a href="https://github.com/ryanburnette/eon" target="_blank">eon</a>. Built with <a href="https://bliss.js.org" target="_blank">Bliss ✨</a></p>
+        </div>
+      </div>
+    </footer>
+    <script src="https://DBBrowne.github.io/blog/main.js"></script>
+  </body>
+</html>
