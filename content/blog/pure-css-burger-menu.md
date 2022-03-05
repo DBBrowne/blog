@@ -179,7 +179,8 @@ a.active{
 }
 ```
 
-<img src="https://user-images.githubusercontent.com/72463218/156239739-ba76eefc-d217-49ba-8556-0d7688e9f92e.gif" alt="navbar demo" width="200"/>
+[navbar demo](https://user-images.githubusercontent.com/72463218/156239739-ba76eefc-d217-49ba-8556-0d7688e9f92e.gif)
+<!-- <img src="https://user-images.githubusercontent.com/72463218/156239739-ba76eefc-d217-49ba-8556-0d7688e9f92e.gif" alt="navbar demo" width="200"/> -->
 
 
 Check out the latest version at dbb.tools, or as it is in the animation above [on github](https://github.com/DBBrowne/portfolio/blob/66938b3402a0e4dd4e504aa271b84baa56d1cd87/src/containers/common/Nav.js#L37-L38).
